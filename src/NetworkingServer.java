@@ -48,15 +48,22 @@ public class NetworkingServer {
                 {
                     OutputStream clientOut = client.getOutputStream();
                     PrintWriter printWriter = new PrintWriter(clientOut, true);
-                    String ansMsg = "Hello, " + msgFromClient;
-                    printWriter.println(ansMsg);
+                    String answerMessage = "Hello, " + msgFromClient;
+                    printWriter.println(answerMessage);
+
+                    // Close streams
+                    clientOut.close();
+                    printWriter.close();
                 }
 
                 // Close sockets
-                if (msgFromClient != null && msgFromClient.equalsIgnoreCase("bye"))
+                else
                 {
+                    clientIn.close();
                     server.close();
+                    bufferedReader.close();
                     client.close();
+
                     break;
                 }
             }
