@@ -37,23 +37,28 @@ public class NetworkingServer {
             // Read data from the client
             InputStream clientIn = client.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientIn));
-            String msgFromClient = bufferedReader.readLine();
-            System.out.println("Message recieved from client = " + msgFromClient);
 
-            // Send response to the client
-            if (msgFromClient != null && !msgFromClient.equalsIgnoreCase("bye"))
+            while (bufferedReader.ready())
             {
-                OutputStream clientOut = client.getOutputStream();
-                PrintWriter printWriter = new PrintWriter(clientOut, true);
-                String ansMsg = "Hello, " + msgFromClient;
-                printWriter.println(ansMsg);
-            }
+                String msgFromClient = bufferedReader.readLine();
+                System.out.println("Message received from client = " + msgFromClient);
 
-            // Close sockets
-            if (msgFromClient != null && msgFromClient.equalsIgnoreCase("bye"))
-            {
-                server.close();
-                client.close();
+                // Send response to the client
+                if (msgFromClient != null && !msgFromClient.equalsIgnoreCase("bye"))
+                {
+                    OutputStream clientOut = client.getOutputStream();
+                    PrintWriter printWriter = new PrintWriter(clientOut, true);
+                    String ansMsg = "Hello, " + msgFromClient;
+                    printWriter.println(ansMsg);
+                }
+
+                // Close sockets
+                if (msgFromClient != null && msgFromClient.equalsIgnoreCase("bye"))
+                {
+                    server.close();
+                    client.close();
+                    break;
+                }
             }
         } catch (IOException ie) {
             System.out.println("Unable to connect to client");
