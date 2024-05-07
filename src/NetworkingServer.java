@@ -21,25 +21,26 @@ public class NetworkingServer {
         }
         System.out.println("Serversocket is created " + server);
 
-        // Wait for the data from the client and reply
-        try{
-            /* Listens for a connection to be made to the socket and accepts it
-            This method blocks until a connection is made */
-            System.out.println("Waiting for connect request...");
-            client = server.accept();
+        while (true)
+        {
 
-            System.out.println("Connect request is accepted...");
-            String clientHost = client.getInetAddress().getHostAddress();
+            // Wait for the data from the client and reply
+            try{
+                /* Listens for a connection to be made to the socket and accepts it
+                This method blocks until a connection is made */
+                System.out.println("Waiting for connect request...");
+                client = server.accept();
 
-            int clientPort = client.getPort();
-            System.out.println("Client host = " + clientHost + "Client port = " + clientPort);
+                System.out.println("Connect request is accepted...");
+                String clientHost = client.getInetAddress().getHostAddress();
 
-            // Read data from the client
-            InputStream clientIn = client.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientIn));
+                int clientPort = client.getPort();
+                System.out.println("Client host = " + clientHost + "\nClient port = " + clientPort);
 
-            while (bufferedReader.ready())
-            {
+                // Read data from the client
+                InputStream clientIn = client.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientIn));
+
                 String msgFromClient = bufferedReader.readLine();
                 System.out.println("Message received from client = " + msgFromClient);
 
@@ -66,9 +67,9 @@ public class NetworkingServer {
 
                     break;
                 }
+            } catch (IOException ie) {
+                System.out.println("Unable to connect to client");
             }
-        } catch (IOException ie) {
-            System.out.println("Unable to connect to client");
         }
     }
 }
